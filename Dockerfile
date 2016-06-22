@@ -1,3 +1,4 @@
+ls
 FROM nefrock/docker-ai-base-cpu:latest
 MAINTAINER siwazaki@nefrock.com
 
@@ -6,6 +7,7 @@ RUN pip install --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/te
 
 RUN pip install chainer
 RUN pip install pyzmq --install-option="--zmq=bundled"
-RUN pip install msgpack-python
+RUN pip install msgpack-pythonRUN
+RUN pip install seaborn tqdm wget sh colorama
 RUN apt-get update && apt-get install -y emacs zsh
 
