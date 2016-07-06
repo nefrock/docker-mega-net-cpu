@@ -1,4 +1,3 @@
-ls
 FROM nefrock/docker-ai-base-cpu:latest
 MAINTAINER siwazaki@nefrock.com
 
