@@ -76,14 +76,14 @@ ENV CI_BUILD_PYTHON python
 ENV PYTHON_BIN_PATH /usr/bin/python2.7
 RUN cd tensorflow && \
     tensorflow/tools/ci_build/builds/configured CPU \
-    bazel build -c opt tensorflow/tools/pip_package:build_pip_package && \
+    bazel build -c opt --copt=-mavx --copt=-mfma --copt=-mfpmath=both --copt=-msse4.2 tensorflow/tools/pip_package:build_pip_package && \
     bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/pip && \
     pip2.7 --no-cache-dir install --upgrade /tmp/pip/tensorflow-1.1.0-cp27-cp27mu-linux_x86_64.whl
 
 ENV PYTHON_BIN_PATH /usr/bin/python3
 RUN cd tensorflow && \
     tensorflow/tools/ci_build/builds/configured CPU \
-    bazel build -c opt tensorflow/tools/pip_package:build_pip_package && \
+    bazel build -c opt --copt=-mavx --copt=-mfma --copt=-mfpmath=both --copt=-msse4.2 tensorflow/tools/pip_package:build_pip_package && \
     bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/pip && \
     pip3 --no-cache-dir install --upgrade /tmp/pip/tensorflow-1.1.0-cp35*.whl # && \
     rm -rf /tmp/pip && \
