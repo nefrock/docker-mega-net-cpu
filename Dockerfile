@@ -2,20 +2,8 @@ FROM nefrock/docker-ai-base-cpu:latest
 MAINTAINER siwazaki@nefrock.com
 
 RUN apt-get update && apt-get install -y emacs zsh libmysqlclient-dev vim
-RUN pip install --upgrade pip && pip install \
-  moviepy \
-  sklearn \
-  chainer \
-  msgpack-python \
-  seaborn \
-  tqdm \
-  wget \
-  sh \
-  colorama \
-  mysql-python \
-  pillow \
-  ipykernel
-RUN pip3 install --upgrade pip && pip3 install -U setuptools && pip3 install \
+
+RUN pip install --upgrade pip && pip install -U setuptools && pip3 install \
   moviepy \
   sklearn \
   chainer \
@@ -69,30 +57,23 @@ RUN mkdir /bazel && \
     rm -f /bazel/bazel-$BAZEL_VERSION-installer-linux-x86_64.sh
 
 WORKDIR /root
-RUN pip2.7 install wheel
-RUN pip3 install wheel
-RUN git clone -b r1.1 https://github.com/tensorflow/tensorflow.git
-ENV CI_BUILD_PYTHON python
-ENV PYTHON_BIN_PATH /usr/bin/python2.7
-RUN cd tensorflow && \
-    tensorflow/tools/ci_build/builds/configured CPU \
-    bazel build -c opt tensorflow/tools/pip_package:build_pip_package && \
-    bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/pip && \
-    pip2.7 --no-cache-dir install --upgrade /tmp/pip/tensorflow-1.1.0-cp27-cp27mu-linux_x86_64.whl
 
-ENV PYTHON_BIN_PATH /usr/bin/python3
+RUN pip install wheel
+RUN git clone -b r1.2 https://github.com/tensorflow/tensorflow.git
+ENV CI_BUILD_PYTHON python
+
+
+ENV PYTHON_BIN_PATH /usr/bin/python
 RUN cd tensorflow && \
     tensorflow/tools/ci_build/builds/configured CPU \
     bazel build -c opt tensorflow/tools/pip_package:build_pip_package && \
     bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/pip && \
-    pip3 --no-cache-dir install --upgrade /tmp/pip/tensorflow-1.1.0-cp35*.whl # && \
+    pip --no-cache-dir install --upgrade /tmp/pip/tensorflow-1.2.0*.whl # && \
     rm -rf /tmp/pip && \
     rm -rf /root/.cache
 
 
-RUN pip2.7 install pyzmq --install-option="--zmq=bundled"
-RUN pip3 install pyzmq --install-option="--zmq=bundled"
-RUN pip2.7 install --upgrade --no-deps git+git://github.com/Theano/Theano.git
-RUN pip3 install --upgrade --no-deps git+git://github.com/Theano/Theano.git
-RUN pip2.7 install keras==2.0.2
-RUN pip3 install keras==2.0.2
+
+RUN pip install pyzmq --install-option="--zmq=bundled"
+RUN pip install --upgrade --no-deps git+git://github.com/Theano/Theano.git
+RUN pip install keras==2.0.5
