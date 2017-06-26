@@ -2,34 +2,23 @@ FROM nefrock/docker-ai-base-cpu:latest
 MAINTAINER siwazaki@nefrock.com
 
 RUN apt-get update && apt-get install -y emacs zsh libmysqlclient-dev vim
+RUN pip3 install --force-reinstall --upgrade pip
+RUN pip3 install -U setuptools
 
-RUN pip3 install --upgrade pip && pip3 install -U setuptools && pip3 install \
+RUN pip3 --no-cache-dir install \
   moviepy \
   sklearn \
-  chainer \
   msgpack-python \
   tqdm \
   wget \
   sh \
   colorama \
-  pillow \
-  ipykernel
-
-RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
-    python get-pip.py && \
-    rm get-pip.py
-
-RUN pip3 --no-cache-dir install \
-        ipykernel \
-        jupyter \
-        matplotlib \
-        numpy \
-        scipy \
-        sklearn \
-        pandas \
-        Pillow \
-        && \
-    python -m ipykernel.kernelspec
+  Pillow \
+  ipykernel \  
+  matplotlib \
+  jupyter \
+  pandas \
+  &&  python3 -m ipykernel.kernelspec
 
 RUN apt-get install -y software-properties-common
 
@@ -61,8 +50,7 @@ RUN pip3 install wheel
 RUN git clone -b r1.2 https://github.com/tensorflow/tensorflow.git
 ENV CI_BUILD_PYTHON python
 
-
-ENV PYTHON_BIN_PATH /usr/bin/python
+ENV PYTHON_BIN_PATH /usr/bin/python3
 RUN cd tensorflow && \
     tensorflow/tools/ci_build/builds/configured CPU \
     bazel build -c opt tensorflow/tools/pip_package:build_pip_package && \
@@ -70,8 +58,6 @@ RUN cd tensorflow && \
     pip3 --no-cache-dir install --upgrade /tmp/pip/tensorflow-1.2.0*.whl # && \
     rm -rf /tmp/pip && \
     rm -rf /root/.cache
-
-
 
 RUN pip3 install pyzmq --install-option="--zmq=bundled"
 RUN pip3 install --upgrade --no-deps git+git://github.com/Theano/Theano.git
