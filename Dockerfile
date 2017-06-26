@@ -3,12 +3,11 @@ MAINTAINER siwazaki@nefrock.com
 
 RUN apt-get update && apt-get install -y emacs zsh libmysqlclient-dev vim
 
-RUN pip install --upgrade pip && pip install -U setuptools && pip3 install \
+RUN pip3 install --upgrade pip && pip3 install -U setuptools && pip3 install \
   moviepy \
   sklearn \
   chainer \
   msgpack-python \
-  seaborn \
   tqdm \
   wget \
   sh \
@@ -20,7 +19,7 @@ RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
     python get-pip.py && \
     rm get-pip.py
 
-RUN pip --no-cache-dir install \
+RUN pip3 --no-cache-dir install \
         ipykernel \
         jupyter \
         matplotlib \
@@ -58,7 +57,7 @@ RUN mkdir /bazel && \
 
 WORKDIR /root
 
-RUN pip install wheel
+RUN pip3 install wheel
 RUN git clone -b r1.2 https://github.com/tensorflow/tensorflow.git
 ENV CI_BUILD_PYTHON python
 
@@ -68,12 +67,12 @@ RUN cd tensorflow && \
     tensorflow/tools/ci_build/builds/configured CPU \
     bazel build -c opt tensorflow/tools/pip_package:build_pip_package && \
     bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/pip && \
-    pip --no-cache-dir install --upgrade /tmp/pip/tensorflow-1.2.0*.whl # && \
+    pip3 --no-cache-dir install --upgrade /tmp/pip/tensorflow-1.2.0*.whl # && \
     rm -rf /tmp/pip && \
     rm -rf /root/.cache
 
 
 
-RUN pip install pyzmq --install-option="--zmq=bundled"
-RUN pip install --upgrade --no-deps git+git://github.com/Theano/Theano.git
-RUN pip install keras==2.0.5
+RUN pip3 install pyzmq --install-option="--zmq=bundled"
+RUN pip3 install --upgrade --no-deps git+git://github.com/Theano/Theano.git
+RUN pip3 install keras==2.0.5
